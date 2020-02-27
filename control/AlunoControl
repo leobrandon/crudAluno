@@ -1,0 +1,38 @@
+package control;
+
+import bean.AlunoBean;
+import java.util.ArrayList;
+import model.AlunoDAO;
+
+public class AlunoControl {
+
+   private AlunoDAO model;
+
+   public AlunoControl() {
+       model = new AlunoDAO();
+   }
+
+   public ArrayList<AlunoBean> browse() {
+       return model.browse();
+   }
+
+   public AlunoBean read(String cpf) {
+       return model.read(removerAcentos(cpf));
+   }
+
+   public void edit(AlunoBean aluno, String cpf) {
+       model.edit(aluno, cpf);
+   }
+
+   public int add(AlunoBean aluno) {
+       return model.add(aluno);
+   }
+
+   public void delete(AlunoBean aluno) {
+       model.delete(aluno);
+   }
+
+   private String removerAcentos(String cpf) {
+       return cpf.replace(".", "");
+   }
+}
