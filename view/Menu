@@ -1,0 +1,128 @@
+package view;
+
+import bean.AlunoBean;
+import control.AlunoControl;
+import javax.swing.JOptionPane;
+
+public class Menu {
+
+   private static AlunoControl alunoControl;
+
+   public Menu() {
+       alunoControl = new AlunoControl();
+       escolha();
+   }
+
+   private void escolha() {
+       String texto = ""
+               + "\n1) Listar"
+               + "\n2) Pesquisar"
+               + "\n3) Editar"
+               + "\n4) Adicionar"
+               + "\n5) Deletar"
+               + "\n\n0) Sair";
+
+       int opcao;
+       do {
+           opcao = Integer.parseInt(
+                   JOptionPane.showInputDialog(null, texto)
+           );
+
+           switch (opcao) {
+               case 1:
+                   listar();
+                   break;
+               case 2:
+                   pesquisar();
+                   break;
+               case 3:
+                   editar();
+                   break;
+               case 4:
+                   adicionar();
+                   break;
+               case 5:
+                   deletar();
+                   break;
+               case 0:
+                   sair();
+                   break;
+               default:
+                   break;
+           }
+       } while (opcao != 0);
+
+   }
+
+   private void listar() {
+       String texto = "";
+       for (AlunoBean aluno : alunoControl.browse()) {
+           texto = texto + "\n " + aluno.getNome() + " - " + aluno.getCpf() + " - " + aluno.getSexo() + " - " + aluno.getIdade();
+       }
+       JOptionPane.showMessageDialog(null, texto);
+   }
+
+   private void pesquisar() {
+       String cpf = JOptionPane.showInputDialog("Digite o CPF");
+       AlunoBean pesquisa = alunoControl.read(cpf);
+       String resultado = "";
+       if (pesquisa == null) {
+           resultado = "Esse CPF nao existe";
+       } else {
+           resultado = resultado + pesquisa.getNome() + " - " + pesquisa.getIdade() + " anos";
+       }
+       JOptionPane.showMessageDialog(null, resultado);
+   }
+
+   private void editar() {
+       String cpfAntigo = JOptionPane.showInputDialog("Digite o CPF");
+       AlunoBean pesquisa = alunoControl.read(cpfAntigo);
+       if (pesquisa == null) {
+           JOptionPane.showMessageDialog(null, "Esse CPF não existe");
+       } else {
+           AlunoBean editar = new AlunoBean();
+           String nomeEditar = JOptionPane.showInputDialog("Digite o nome");
+           String cpfEditar = JOptionPane.showInputDialog("Digite o CPF");
+           String sexoEditar = JOptionPane.showInputDialog("Digite o sexo");
+           int idadeEditar = Integer.parseInt(JOptionPane.showInputDialog("Digite a idade"));
+          
+           editar.setNome(nomeEditar);
+           editar.setCpf(cpfEditar);
+           editar.setSexo(sexoEditar);
+           editar.setIdade(idadeEditar);
+          
+           alunoControl.edit(editar, cpfAntigo);
+       }
+
+   }
+
+   private static void adicionar() {
+       AlunoBean novo = new AlunoBean();
+       String nome = JOptionPane.showInputDialog("Digite o nome");
+       String cpf = JOptionPane.showInputDialog("Digite o CPF");
+       String sexo = JOptionPane.showInputDialog("Digite o sexo");
+       int idade = Integer.parseInt(JOptionPane.showInputDialog("Digite a idade"));
+
+       novo.setNome(nome);
+       novo.setCpf(cpf);
+       novo.setSexo(sexo);
+       novo.setIdade(idade);
+       int add = alunoControl.add(novo);
+       JOptionPane.showMessageDialog(null, "Aluno adicionado, id: " + add);
+   }
+
+   private static void deletar() {
+       String cpf = JOptionPane.showInputDialog("Digite o CPF");
+       AlunoBean pesquisa = alunoControl.read(cpf);
+       String resultado = "";
+       if (pesquisa == null) {
+           resultado = "Esse CPF não existe";
+       } else {
+           alunoControl.delete(pesquisa);
+       }
+   }
+
+   private static void sair() {
+       JOptionPane.showMessageDialog(null, "Até a proxima");
+   }
+}
