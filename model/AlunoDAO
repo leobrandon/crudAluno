@@ -1,0 +1,44 @@
+package model;
+
+import bean.AlunoBean;
+import java.util.ArrayList;
+
+public class AlunoDAO {
+
+   private ArrayList<AlunoBean> tabela;
+
+   public AlunoDAO() {
+       tabela = new ArrayList<>();
+   }
+
+   public ArrayList<AlunoBean> browse() {
+       return tabela;
+   }
+
+   public AlunoBean read(String cpf) {
+       for (AlunoBean aluno : tabela) {
+           if (aluno.getCpf().equals(cpf)) {
+               return aluno;
+           }
+       }
+       return null;
+   }
+
+   public void edit(AlunoBean editar, String cpf) {
+       for (AlunoBean aluno : tabela) {
+           if (aluno.getCpf().equals(cpf)) {
+               tabela.set(tabela.indexOf(aluno), editar);
+           }
+       }
+   }
+
+   public int add(AlunoBean aluno) {
+       aluno.setId(tabela.size());
+       tabela.add(aluno);
+       return tabela.size() - 1;
+   }
+
+   public void delete(AlunoBean delete) {
+       tabela.remove(delete);
+   }
+}
